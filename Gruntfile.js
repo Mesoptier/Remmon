@@ -17,7 +17,7 @@ module.exports = function (grunt) {
                     yuicompress: false
                 },
                 files: {
-                    "./public/css/style.css": "./public/less/style.less"
+                    "./app/public/css/style.css": "./app/public/less/style.less"
                 }
             }
         },
@@ -28,8 +28,8 @@ module.exports = function (grunt) {
                 expand: true,
                 flatten: true,
                 cascade: true,
-                src: 'public/css/*.css',
-                dest: 'public/css'
+                src: 'app/public/css/*.css',
+                dest: 'app/public/css'
             }
         }
     });
