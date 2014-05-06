@@ -1,0 +1,14 @@
+# JetBrains
+.idea/
+*.ipr
+*.iws
+*.iml
+
+# Database
+data/db/
+
+# Node
+node_modules
+
+# Bower
+**/bower_components/

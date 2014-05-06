@@ -1,0 +1,17 @@
+{
+  "name": "Remmon",
+  "main": "index.js",
+  "version": "0.0.1",
+  "authors": [
+    "Koen Klaren <koen.klaren@gmail.com>"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

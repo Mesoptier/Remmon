@@ -1,0 +1,108 @@
+<%
+var scripts = [
+    "/bower_components/jquery/dist/jquery.min.js",
+    "/js/main.js"
+];
+%> <% include _head %>
+
+<header>
+    <h1 class="logo">remmon</h1>
+
+    <h2>graph ratings of tv series</h2>
+</header>
+
+<form class="search">
+    <input name="q" type="text" placeholder="series name"/>
+
+    <div class="results-box hidden">
+        <div class="results"></div>
+        <div class="no-results">No shows found</div>
+    </div>
+</form>
+
+<script>
+    var $search = $(".search").first(),
+            $query = $search.find("[name=q]").first(),
+            $resultsBox = $search.find(".results-box").first(),
+            $results = $resultsBox.find(".results").first(),
+            $noResults = $resultsBox.find(".no-results").first(),
+            query = "",
+            limit = 5;
+
+    // Pre-generate the result items
+    for (var i = 0; i < limit; i++) {
+        $results.append($("<a></a>", { class: "result-item" }).hide());
+    }
+
+    // Don't let the form submit
+    $search.on("submit", function (e) {
+        e.preventDefault();
+    });
+
+    // Debounced searching, fires only every 250ms
+    $query.on("change keyup", remmon.debounce(function () {
+        // Only search when the input has actually changed
+        if (query != $query.val()) {
+            query = $query.val();
+
+            // If the query is empty, hide the results box
+            if (query.trim() == "") {
+                return $resultsBox.addClass("hidden");
+            }
+
+            // Perform the search
+            remmon.search(query, limit, function (results) {
+                $resultsBox.removeClass("hidden");
+
+                if (results.length == 0) {
+                    $results.hide();
+                    $noResults.show();
+                } else {
+                    $noResults.hide();
+                    $results.show();
+
+                    // Populate children
+                    $results.children().each(function (i) {
+                        if (results.length <= i) {
+                            $(this).hide();
+                        } else {
+                            $(this).show()
+                                    .text(results[i].title)
+                                    .attr("href", "/" + results[i].slug);
+                        }
+                    });
+                }
+            });
+        }
+    }, 250));
+
+    // If the query already has some data, trigger a search
+    if ($query.val()) {
+        $query.trigger("change");
+    }
+
+    // Up/down controls, for selecting results
+    $search.on("keydown", ":focus", function (e) {
+        var $this = $(this);
+
+        if (e.which == 40 /* DOWN */) {
+            e.preventDefault();
+
+            if ($this.is("input")) {
+                $results.children().first().focus();
+            } else if ($this.is(".result-item")) {
+                $this.next(".result-item").focus();
+            }
+        } else if (e.which == 38 /* UP */) {
+            e.preventDefault();
+
+            if ($this.is(":first-child")) {
+                $query.focus();
+            } else if ($this.is(".result-item")) {
+                $this.prev(".result-item").focus();
+            }
+        }
+    });
+</script>
+
+<% include _foot %>

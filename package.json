@@ -1,0 +1,35 @@
+{
+    "name": "Remmon",
+    "version": "0.0.1",
+    "private": true,
+    "main": "app/index.js",
+    "engines": {
+        "node": ">= 0.6.0",
+        "npm": ">= 1.0.0"
+    },
+    "dependencies": {
+        "express": "~4.1.1",
+        "request": "^2.34.0",
+        "mongodb": "^1.4.3",
+        "mongoose": "^3.8.8",
+        "async": "^0.8.0",
+        "cheerio": "^0.15.0",
+        "consolidate": "^0.10.0",
+        "ejs": "^1.0.0",
+        "express-params": "0.0.3",
+        "morgan": "^1.0.0",
+        "body-parser": "^1.0.2",
+        "memoizee": "^0.3.2"
+    },
+    "devDependencies": {
+        "grunt": "^0.4.4",
+        "grunt-shell": "^0.7.0",
+        "grunt-autoprefixer": "^0.7.3",
+        "grunt-contrib-less": "^0.11.0"
+    },
+    "scripts": {
+        "start": "node ./app/index.js"
+    },
+    "author": "Koen Klaren <koen.klaren@gmail.com>",
+    "license": "ISC"
+}

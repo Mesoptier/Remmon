@@ -1,0 +1,112 @@
+<%
+var title = show.title,
+    scripts = [
+        "/bower_components/jquery/dist/jquery.min.js",
+        "/bower_components/d3js/build/d3.v3.min.js",
+        "/js/main.js"
+    ];
+%><% include _head %>
+
+    <a href="/" title="Home" class="home"></a>
+
+    <header>
+        <h1><%= show.title %></h1>
+        <%
+            var details = [];
+            if (show.year > 1969) { details.push(show.year); }
+            if (show.network) { details.push(show.network); }
+        %>
+        <h2><%- details.join(" &middot; ") %></h2>
+    </header>
+
+    <div class="ratings-graph"></div>
+    <div class="graph-controls">
+        <div class="control-section">
+            <div class="control-item">
+                <input type="radio" name="data-source" value="imdb" id="data-source-imdb"/>
+                <label for="data-source-imdb">IMDb</label>
+            </div>
+            <div class="control-item">
+                <input type="radio" name="data-source" value="trakt" id="data-source-trakt"/>
+                <label for="data-source-trakt">Trakt.tv</label>
+            </div>
+        </div>
+        <span class="separator"></span>
+        <div class="control-section">
+            <div class="control-item">
+                <input type="radio" name="line-type" value="rating" id="line-type-rating"/>
+                <label for="line-type-rating">Rating</label>
+            </div>
+            <div class="control-item">
+                <input type="radio" name="line-type" value="trend" id="line-type-trend"/>
+                <label for="line-type-trend">Trend</label>
+            </div>
+            <div class="control-item">
+                <input type="radio" name="line-type" value="mean" id="line-type-mean"/>
+                <label for="line-type-mean">Mean</label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var data = <%- JSON.stringify(data) %>;
+    </script>
+    <script>
+        var graph = new remmon.Graph(".ratings-graph", {
+            width: $(".ratings-graph").innerWidth(),
+            height: 400,
+            minEpisodeWidth: 10,
+            source: remmon.get("data-source", "imdb"),
+            line: remmon.get("line-type", "rating")
+        }, data);
+
+        graph.draw();
+
+        $(window).on("resize", remmon.debounce(function () {
+            if (graph.resize($(".ratings-graph").innerWidth())) {
+                console.log("redraw");
+                // Only redraw if the window resize caused the graph to resize as well
+                graph.draw();
+            }
+        }, 100));
+
+        $(".graph-controls input[name=data-source][value=" + graph.getSource() + "]").prop("checked", true);
+        $(".graph-controls input[name=line-type][value=" + graph.getType() + "]").prop("checked", true);
+
+        $(".graph-controls input[name=data-source]").change(function () {
+            remmon.set("data-source", $(this).val());
+            graph.setSource($(this).val());
+            graph.draw(true);
+        });
+
+        $(".graph-controls input[name=line-type]").change(function () {
+            remmon.set("line-type", $(this).val());
+            graph.setType($(this).val());
+            graph.draw(true);
+        });
+    </script>
+    <!--<script>
+        var graph = remmon.graph(".ratings-graph", {
+            lineType: remmon.get("line-type", "rating")
+        }, data);
+
+        graph.draw($("body").innerWidth(), 400);
+
+        $(window).resize(function () {
+            graph.draw($("body").innerWidth(), 400);
+        });
+
+        if (data.length == 0) {
+            $(".graph-controls").hide();
+        } else {
+            $(".graph-controls input[name=line-type][value=" + graph.getLineType() + "]").prop("checked", true);
+
+            $(".graph-controls input[name=line-type]").change(function () {
+                remmon.set("line-type", $(this).val());
+                graph.setLineType($(this).val());
+            });
+        }
+
+    </script>-->
+
+<% include _foot %>
