@@ -220,7 +220,8 @@ var remmon = {
         // --- [Elements] ---
         var svg = d3.select(selector).append("svg")
             .attr("width", 1000)
-            .attr("height", 400);
+            .attr("height", 400)
+            .attr("preserveAspectRatio", "none");
 
         var backLinesEnter = svg.selectAll(".back-line")
             .data(d3.range(0, 11))
@@ -287,6 +288,10 @@ var remmon = {
             return changed;
         };
 
+        /**
+         * Sets the data source.
+         * @param {string} source - "imdb" or "trakt"
+         */
         this.setSource = function (source) {
             options.source = source;
             this._updateData();
@@ -294,6 +299,10 @@ var remmon = {
 
         this.getSource = function () { return options.source; };
 
+        /**
+         * Sets the line type.
+         * @param {string} type - "rating", "trend" or "mean"
+         */
         this.setType = function (type) {
             options.type = type;
             this._updateData();
@@ -301,6 +310,10 @@ var remmon = {
 
         this.getType = function () { return options.type; };
 
+        /**
+         * Update the data, after setting the data-source or line-type.
+         * @private
+         */
         this._updateData = function () {
             dots.data(data[options.source].episodes);
             lines.data(data[options.source][options.type]);
@@ -309,37 +322,75 @@ var remmon = {
 
         /**
          * Draws the graph.
+         * @param {string} [animation] - What animation to perform, if any.
          */
-        this.draw = function (animate) {
-            animate = animate || false;
-
+        this.draw = function (animation) {
             backLinesEnter
                 .attr("x1", 0)
                 .attr("x2", options.width)
                 .attr("y1", function (d) { return y(d) })
                 .attr("y2", function (d) { return y(d) });
 
-            (!animate ? dotsEnter : dotsEnter.transition().duration(300))
+            this._animate(dotsEnter, animation)
                 .attr("x1", function (e, i) { return ex(e.s, e.e); })
                 .attr("x2", function (e, i) { return ex(e.s, e.e); })
                 .attr("y1", function (e) { return y(e.r); })
                 .attr("y2", function (e) { return y(e.r); });
 
-            (!animate ? linesEnter : linesEnter.transition().duration(300))
+            this._animate(linesEnter, animation)
                 .attr("d", function (s) { return line(s.e); });
 
-            (!animate ? areasEnter : areasEnter.transition().duration(300))
+            this._animate(areasEnter, animation)
                 .attr("d", function (s) { return area(s.e); });
+        };
+
+        this._animate = function (enter, animation) {
+            switch (animation) {
+                case "initial":
+                    var opacity = enter.style("opacity");
+                    return enter
+                        .style("opacity", 0)
+                        .attr("transform", "translate(0, " + (-y(0) * (0.8 - 1)) + ") scale(1, 0.8)")
+                        .transition()
+                        .delay(100)
+                        .duration(600)
+                        .ease("back-out")
+                        .style("opacity", opacity)
+                        .attr("transform", "translate(0, 0) scale(1, 1)");
+
+                case "source-change":
+                case "type-change":
+                    return enter
+                        .transition()
+                        .duration(400)
+                        .ease("cubic-in-out");
+
+                default:
+                    return enter;
+            }
         };
 
         // Call the resize method with the initial width and height
         this.resize(options.width, options.height);
     },
 
+    /**
+     * Merge the episodes of multiple seasons into one array.
+     * @param {array} seasons
+     * @returns {array}
+     * @private
+     */
     _mergeSeasons: function (seasons) {
         return Array.prototype.concat.apply([], seasons.map(function (s) { return s.e; }))
     },
 
+    /**
+     * Calculate the trend line for a collection of points.
+     * @param {array} xSeries - X coordinates of the points
+     * @param {array} ySeries - Y coordinates of the points
+     * @returns {d3.scale.linear} - The trend line as a d3js linear scale
+     * @private
+     */
     _trendLine: function (xSeries, ySeries) {
         var reduceSumFunc = function (prev, cur) { return prev + cur; };
 

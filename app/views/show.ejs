@@ -57,18 +57,22 @@ var title = show.title,
             height: 400,
             minEpisodeWidth: 10,
             source: remmon.get("data-source", "imdb"),
-            line: remmon.get("line-type", "rating")
+            type: remmon.get("line-type", "rating")
         }, data);
 
-        graph.draw();
+        graph.draw("initial");
 
-        $(window).on("resize", remmon.debounce(function () {
+        // Only redraw if the window hasn't resized for 100 milliseconds, but immediately after the first call.
+        var resizeDraw = remmon.debounce(function () {
+            graph.draw("resize");
+        }, 100, true);
+
+        $(window).on("resize", function () {
             if (graph.resize($(".ratings-graph").innerWidth())) {
-                console.log("redraw");
                 // Only redraw if the window resize caused the graph to resize as well
-                graph.draw();
+                resizeDraw();
             }
-        }, 100));
+        });
 
         $(".graph-controls input[name=data-source][value=" + graph.getSource() + "]").prop("checked", true);
         $(".graph-controls input[name=line-type][value=" + graph.getType() + "]").prop("checked", true);
@@ -76,13 +80,13 @@ var title = show.title,
         $(".graph-controls input[name=data-source]").change(function () {
             remmon.set("data-source", $(this).val());
             graph.setSource($(this).val());
-            graph.draw(true);
+            graph.draw("source-change");
         });
 
         $(".graph-controls input[name=line-type]").change(function () {
             remmon.set("line-type", $(this).val());
             graph.setType($(this).val());
-            graph.draw(true);
+            graph.draw("type-change");
         });
     </script>
     <!--<script>

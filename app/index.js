@@ -51,15 +51,18 @@ app.get("/:title", function (req, res, next) {
         if (!show) return next();
 
         if (show.slug != title) {
+            // Redirect to the correct slug. (e.g. castle -> castle-2009, or tt1520211 -> the-walking-dead)
             return res.redirect("/" + show.slug);
         }
 
         var data = show.seasons.filter(function (s) {
+            // Filter out null/special seasons
             return s && s.season > 0;
         }).map(function (s) {
             return {
                 s: s.season,
                 e: s.episodes.filter(function (e) {
+                    // Filter out episodes that haven't aired yet
                     return e && e.aired < Date.now();
                 }).map(function (e) {
                     return {
@@ -71,8 +74,10 @@ app.get("/:title", function (req, res, next) {
                 })
             };
         }).filter(function (s) {
+            // Filter out seasons with no episodes
             return s.e.length > 0;
         }).sort(function (s1, s2) {
+            // Sort seasons in ascending order
             return s1.s - s2.s;
         });
 
