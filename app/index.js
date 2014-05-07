@@ -19,7 +19,7 @@ app.set("mongodb host", "127.0.0.1");
 app.set("mongodb port", "27017");
 app.set("trakt apikey", process.env.TRAKT_APIKEY);
 
-app.use(morgan("dev"));
+app.use(morgan("short"));
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser());
 
