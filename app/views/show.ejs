@@ -13,10 +13,10 @@ var title = show.title,
         <h1><%= show.title %></h1>
         <%
             var details = [];
-            if (show.year > 1969) { details.push(show.year); }
             if (show.network) { details.push(show.network); }
+            if (show.year > 1969) { details.push(show.year); }
         %>
-        <h2><%- details.join(" &middot; ") %></h2>
+        <h2><%= details.join(", ") %></h2>
     </header>
 
     <div class="ratings-graph"></div>
