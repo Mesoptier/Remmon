@@ -115,28 +115,53 @@ var remmon = {
             source.mean = [];
 
             seasons.forEach(function (s) {
-                var e = s.e.filter(function (e) {
-                    return e.r[short] != undefined;
-                }).map(function (e) {
+                var e = s.e.map(function (e) {
                     return {
                         s: e.s,
                         e: e.e,
                         t: e.t,
                         r: e.r[short]
                     };
-                })
+                });
+
+                // Remove episodes without a rating, only for calculating trend line
+                var te = e.filter(function (e) {
+                    return e.r != undefined;
+                });
+
+                // Calculate trend line
+                var trend = remmon._trendLine(
+                    te.map(function (d) { return d.e; }),
+                    te.map(function (d) { return d.r; })
+                );
+
+                // Add missing ratings, based on trend line
+                e.forEach(function (ee, i) {
+                    if (ee.r == undefined) {
+                        var r = trend(ee.e) * 0.2,
+                            c = 0.2;
+
+                        if (e[i - 1] != undefined && e[i - 1].r != undefined) {
+                            r += e[i - 1].r;
+                            c++;
+                        }
+
+                        if (e[i + 1] != undefined && e[i + 1].r != undefined) {
+                            r += e[i + 1].r;
+                            c++;
+                        }
+
+                        console.log(r, c, r/c);
+
+                        ee.r = r / c;
+                    }
+                });
 
                 // Rating
                 source.rating.push({
                     s: s.s,
                     e: e
                 });
-
-                // Trend
-                var trend = remmon._trendLine(
-                    e.map(function (d) { return d.e; }),
-                    e.map(function (d) { return d.r; })
-                );
 
                 source.trend.push({
                     s: s.s,
