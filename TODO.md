@@ -6,8 +6,8 @@
  *  Mobile
 
 ### Scraper
- *  Fix server crashes (Lost)
- *  Fix IMDB-Trakt combination issues (Continuum)
+ *  ~~Fix server crashes (Lost)~~
+ *  ~~Fix IMDB-Trakt combination issues (Continuum)~~
  *  Proper error-handling
 
 ### Home page
@@ -18,7 +18,7 @@
  *  IMDb/Trakt/whatever links
 
 ### Graphs
- *  Season labels
+ *  ~~Season labels~~
  *  Hover effects, episode information
  *  Labels over controls
  *  Data-source/Line-type-selection via URL, for sharing
