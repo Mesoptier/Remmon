@@ -157,12 +157,13 @@ scraper._updateShowImdb = function (update, callback) {
             $ = cheerio.load(body);
 
         $(".epdate table").first().find("tr").each(function (i, row) {
-            // Skip the first row
-            if (i == 0) return;
-
             var cells = $(row).find("td"),
-                numbers = cells.eq(cols.number).text().match(/(\d+)\.(\d+)/),
-                season = parseInt(numbers[1]),
+                numbers = cells.eq(cols.number).text().match(/(\d+)\W(\d+)/);
+
+            // Skip rows with invalid numbers field
+            if (numbers == null) return;
+
+            var season = parseInt(numbers[1]),
                 episode = parseInt(numbers[2]),
                 rating = parseFloat(cells.eq(cols.rating).text());
 
