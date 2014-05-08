@@ -13,6 +13,8 @@ var showSchema = new mongoose.Schema({
     imdbId: { type: String, unique: true },
     tvdbId: { type: String, unique: true },
 
+    updatedAt: Date,
+
     seasons: [{
         season: Number,
         episodes: [{

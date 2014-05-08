@@ -90,4 +90,18 @@ app.get("/:title", function (req, res, next) {
     });
 });
 
+app.post("/:title/reload", function (req, res, next) {
+    var title = req.params.title;
+
+    scraper.updateShow(title, function (err, show) {
+        if (err)
+            return res.json({ status: "error", error: err.message.toString() });
+
+        if (show == null)
+            return res.json({ status: "error", error: "iunno" });
+
+        res.json({ status: "success" });
+    });
+});
+
 app.listen(app.get("port"), app.get("host"));

@@ -108,7 +108,9 @@ scraper.updateShow = function (title, callback) {
 
             slug: scraper._getTraktSlug(data.url),
             imdbId: data.imdb_id || null,
-            tvdbId: data.tvdb_id || null
+            tvdbId: data.tvdb_id || null,
+
+            updatedAt: new Date
         };
 
         update.seasons = [];
@@ -132,9 +134,9 @@ scraper.updateShow = function (title, callback) {
 
         scraper._updateShowImdb(update, function (err, update) {
             Show.findOneAndUpdate({ $or: [
-                { slug: title },
-                { imdbId: title },
-                { tvdbId: title }
+                { slug: update.slug },
+                { imdbId: update.imdbId },
+                { tvdbId: update.tvdbId }
             ] }, update, { upsert: true }, function (err, show) {
                 if (err) return callback(err);
 

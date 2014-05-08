@@ -64,7 +64,7 @@ h3 {
   shape-rendering: crispEdges;
 }
 .ratings-graph .dot {
-  stroke-width: 4;
+  stroke-width: 5;
   stroke-linecap: round;
 }
 .ratings-graph .line {
@@ -209,29 +209,30 @@ h3 {
   text-align: center;
   font-style: italic;
 }
-.home {
-  display: block;
+.actions {
   position: absolute;
-  left: 15px;
-  top: 15px;
+  top: 0;
+  left: 0;
+  margin: 15px;
+}
+.action-button {
+  display: block;
+  float: left;
   width: 40px;
   height: 40px;
-  padding-top: 7px;
+  margin-right: 5px;
+  padding-top: 11px;
   text-decoration: none;
   text-align: center;
-  color: #a0a0a0;
+  color: #808080;
+  font-size: 16px;
   cursor: pointer;
 }
-.home:hover,
-.home:focus {
+.action-button:hover,
+.action-button:focus {
   outline: 0;
   background-color: #f8f8f8;
 }
-.home:active {
+.action-button:active {
   background-color: #f0f0f0;
-}
-.home:before {
-  content: "\2302";
-  font-size: 21px;
-  display: inline-block;
 }

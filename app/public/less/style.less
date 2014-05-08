@@ -1,16 +1,5 @@
 @detail: #9b59b6;
 
-//@keyframes logo-color {
-//  0%    { color: #1abc9c }
-//  14.3% { color: #2ecc71 }
-//  28.6% { color: #f1c40f }
-//  43.9% { color: #e67e22 }
-//  57.1% { color: #e74c3c }
-//  71.4% { color: #9b59b6 }
-//  85.7% { color: #3498db }
-//  100%  { color: #1abc9c }
-//}
-
 .clearfix() {
   zoom: 1;
   &:before { content: ""; display: block; }
@@ -72,7 +61,6 @@ h1 {
 
   &.logo {
     color: darken(@detail, 5%);
-    //animation: logo-color 30s infinite;
   }
 }
 
@@ -108,7 +96,7 @@ h3 {
   }
 
   .dot {
-    stroke-width: 4;
+    stroke-width: 5;
     stroke-linecap: round;
   }
 
@@ -158,10 +146,6 @@ h3 {
       color: #fff;
       background-color: @detail;
     }
-
-//    :focus + label {
-//      box-shadow: 0 0 0 1px @detail inset;
-//    }
 
   }
 
@@ -246,27 +230,29 @@ h3 {
   }
 }
 
-.home {
-  display: block;
+.actions {
   position: absolute;
-  left: 15px;
-  top: 15px;
+  top: 0;
+  left: 0;
+
+  margin: 15px;
+}
+
+.action-button {
+  display: block;
+  float: left;
 
   width: 40px;
   height: 40px;
-  padding-top: 7px;
+  margin-right: 5px;
+  padding-top: 11px;
 
   text-decoration: none;
   text-align: center;
 
-  color: #a0a0a0;
+  color: #808080;
+  font-size: 16px;
 
   .button();
-
-  &:before {
-    content: "\2302";
-    font-size: 21px;
-    display: inline-block;
-  }
 
 }

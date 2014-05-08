@@ -86,6 +86,23 @@ var remmon = {
     },
 
     /**
+     * Callback for the reloadShow method.
+     * @callback remmon~reloadShowCallback
+     * @param {boolean} success - Whether the reload was successful
+     */
+
+    /**
+     * Reloads a show.
+     * @param {string} title - Title of the show to reload (slug / imdb id / tvdb id)
+     * @param {remmon~reloadShowCallback} callback - Callback that handles the result
+     */
+    reloadShow: function (title, callback) {
+        $.post("/" + title + "/reload", function (result) {
+            callback(result.status == "success");
+        });
+    },
+
+    /**
      * Class used for graphing ratings.
      * @param selector
      * @param options
@@ -150,8 +167,6 @@ var remmon = {
                             r += e[i + 1].r;
                             c++;
                         }
-
-                        console.log(r, c, r/c);
 
                         ee.r = r / c;
                     }
