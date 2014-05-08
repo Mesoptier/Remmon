@@ -89,28 +89,5 @@ var title = show.title,
             graph.draw("type-change");
         });
     </script>
-    <!--<script>
-        var graph = remmon.graph(".ratings-graph", {
-            lineType: remmon.get("line-type", "rating")
-        }, data);
-
-        graph.draw($("body").innerWidth(), 400);
-
-        $(window).resize(function () {
-            graph.draw($("body").innerWidth(), 400);
-        });
-
-        if (data.length == 0) {
-            $(".graph-controls").hide();
-        } else {
-            $(".graph-controls input[name=line-type][value=" + graph.getLineType() + "]").prop("checked", true);
-
-            $(".graph-controls input[name=line-type]").change(function () {
-                remmon.set("line-type", $(this).val());
-                graph.setLineType($(this).val());
-            });
-        }
-
-    </script>-->
 
 <% include _foot %>
