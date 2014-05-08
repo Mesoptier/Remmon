@@ -63,7 +63,7 @@ app.get("/:title", function (req, res, next) {
                 s: s.season,
                 e: s.episodes.filter(function (e) {
                     // Filter out episodes that haven't aired yet
-                    return e && e.aired < Date.now();
+                    return e && e.aired < Date.now() && e.aired >= show.aired;
                 }).map(function (e) {
                     return {
                         s: e.season,
@@ -71,6 +71,8 @@ app.get("/:title", function (req, res, next) {
                         t: e.title,
                         r: { t: e.traktRating, i: e.imdbRating }
                     };
+                }).sort(function (e1, e2) {
+                    return e1.e - e2.e;
                 })
             };
         }).filter(function (s) {
