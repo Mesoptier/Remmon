@@ -292,6 +292,12 @@ var remmon = {
             .attr("class", "area")
             .style("fill", function (d, i) { return sc(d.s); });
 
+        var seasonLabelsEnter = svg.selectAll(".season-label")
+            .data(data[options.source][options.type])
+            .enter().append("text")
+            .attr("class", "season-label")
+            .text(function (d) { return "Season " + d.s; })
+
         /**
          * Updates the width and height of the graph, it still needs to be redrawn to see the changes.
          * @param {number} [width] - New width
@@ -382,6 +388,10 @@ var remmon = {
 
             this._animate(areasEnter, animation)
                 .attr("d", function (s) { return area(s.e); });
+
+            seasonLabelsEnter
+                .attr("x", function (s) { return (x(se(s.s)) + x(se(s.s + 1))) / 2; })
+                .attr("y", y(0) + 30)
         };
 
         this._animate = function (enter, animation) {
