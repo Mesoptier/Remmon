@@ -390,7 +390,7 @@ var remmon = {
                 .attr("d", function (s) { return area(s.e); });
 
             seasonLabelsEnter
-                .attr("x", function (s) { return (x(se(s.s)) + x(se(s.s + 1))) / 2; })
+                .attr("x", function (s) { return (ex(s.s, 1) + ex(s.s + 1, 0)) / 2; })
                 .attr("y", y(0) + 30)
         };
 
