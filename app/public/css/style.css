@@ -5,7 +5,7 @@
 }
 body {
   margin: 0;
-  font-family: "Raleway";
+  font-family: "Lato";
   font-weight: 300;
   color: #444;
   text-align: center;
@@ -17,6 +17,7 @@ header {
 h1,
 h2,
 h3 {
+  font-family: "Raleway";
   font-weight: 300;
   margin: 20px 0;
 }
@@ -52,9 +53,11 @@ h3 {
   background: #e0e0e0;
 }
 .ratings-graph {
+  position: relative;
   width: 100%;
   min-height: 400px;
-  margin: 50px 0;
+  margin: -50px 0 50px;
+  padding-top: 50px;
   overflow: hidden;
   overflow-x: auto;
 }
@@ -62,10 +65,6 @@ h3 {
   stroke: #f2f2f2;
   stroke-width: 2;
   shape-rendering: crispEdges;
-}
-.ratings-graph .dot {
-  stroke-width: 5;
-  stroke-linecap: round;
 }
 .ratings-graph .line {
   fill: none;
@@ -79,6 +78,34 @@ h3 {
   text-anchor: middle;
   fill: #808080;
   font-size: 16px;
+}
+.ratings-graph .tooltip {
+  position: absolute;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ratings-graph .tooltip:after {
+  display: block;
+  content: "";
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+}
+.ratings-graph .tooltip .tooltip-content {
+  position: absolute;
+  bottom: 5px;
+  padding: 7px 10px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 14px;
+}
+.ratings-graph .tooltip .tooltip-content span {
+  display: block;
+  font-size: 20px;
 }
 .graph-controls .control-section {
   display: inline-block;

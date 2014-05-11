@@ -258,25 +258,79 @@ var remmon = {
             .y1(function (e) { return y(e.r); });
 
         // --- [Elements] ---
-        var svg = d3.select(selector).append("svg")
+        var root = d3.select(selector);
+
+        var svg = root.append("svg")
             .attr("width", 1000)
             .attr("height", 400)
             .attr("preserveAspectRatio", "none");
 
-        var backLinesEnter = svg.selectAll(".back-line")
+        // Groups
+        var groupBackLines = svg.append("g").attr("class", "group group-backlines"),
+            groupAreas = svg.append("g").attr("class", "group group-areas"),
+            groupLines = svg.append("g").attr("class", "group group-lines"),
+            groupSeasonLabels = svg.append("g").attr("class", "group group-seasonlabels"),
+            groupDots = svg.append("g").attr("class", "group group-dots");
+
+        var backLinesEnter = groupBackLines.selectAll(".back-line")
             .data(d3.range(0, 11))
             .enter().append("line")
             .attr("class", "back-line");
 
-        var dots = svg.selectAll(".dot")
+        var tooltip = root.append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        var tooltipContent = tooltip.append("div")
+            .attr("class", "tooltip-content");
+
+        var dots = groupDots.selectAll(".dot")
             .data(data[options.source].episodes);
 
         var dotsEnter = dots
-            .enter().append("line")
+            .enter().append("circle")
             .attr("class", "dot")
-            .attr("stroke", function (d) { return sc(d.s); });
+            .attr("r", 3)
+            .attr("fill", function (d) { return sc(d.s); })
+            // Invisible border, gives a larger hover area
+            .attr("stroke-width", 7).attr("stroke", "transparent")
+            .on("mouseover", function (d) {
+                d3.select(this)
+                    .attr("r", 4);
 
-        var lines = svg.selectAll(".line")
+                tooltipContent
+                    // Fixes a bug with a ghost scrollbar appearing
+                    .style("left", "-1000px")
+                    .html("<span>" + d.r.toFixed(1) + "</span>" + d.e + ". " + d.t);
+
+                // Calculate offset of the content, so it doesn't go over the edge
+                var left = ex(d.s, d.e),
+                    widthContent = parseInt(tooltipContent.style("width")),
+                    leftContent = widthContent / 2,
+                    margin = 10;
+
+                leftContent += Math.min(0, left - leftContent - margin);
+                leftContent -= Math.min(0, options.width - left - widthContent + leftContent - margin);
+
+                tooltipContent
+                    .style("left", -leftContent + "px");
+
+                // Show the tooltip
+                tooltip
+                    .style("bottom", (options.height - y(d.r)) + "px")
+                    .style("left", left + "px")
+                    .transition()
+                    .style("opacity", 1);
+            })
+            .on("mouseout", function (d) {
+                d3.select(this)
+                    .attr("r", 3);
+
+                tooltip.transition()
+                    .style("opacity", 0);
+            });
+
+        var lines = groupLines.selectAll(".line")
             .data(data[options.source][options.type]);
 
         var linesEnter = lines
@@ -284,7 +338,7 @@ var remmon = {
             .attr("class", "line")
             .style("stroke", function (d, i) { return sc(d.s); });
 
-        var areas = svg.selectAll(".area")
+        var areas = groupAreas.selectAll(".area")
             .data(data[options.source][options.type]);
 
         var areasEnter = areas
@@ -292,11 +346,11 @@ var remmon = {
             .attr("class", "area")
             .style("fill", function (d, i) { return sc(d.s); });
 
-        var seasonLabelsEnter = svg.selectAll(".season-label")
+        var seasonLabelsEnter = groupSeasonLabels.selectAll(".season-label")
             .data(data[options.source][options.type])
             .enter().append("text")
             .attr("class", "season-label")
-            .text(function (d) { return "Season " + d.s; })
+            .text(function (d) { return "Season " + d.s; });
 
         /**
          * Updates the width and height of the graph, it still needs to be redrawn to see the changes.
@@ -378,10 +432,8 @@ var remmon = {
                 .attr("y2", function (d) { return y(d) });
 
             this._animate(dotsEnter, animation)
-                .attr("x1", function (e, i) { return ex(e.s, e.e); })
-                .attr("x2", function (e, i) { return ex(e.s, e.e); })
-                .attr("y1", function (e) { return y(e.r); })
-                .attr("y2", function (e) { return y(e.r); });
+                .attr("cx", function (e, i) { return ex(e.s, e.e); })
+                .attr("cy", function (e) { return y(e.r); });
 
             this._animate(linesEnter, animation)
                 .attr("d", function (s) { return line(s.e); });

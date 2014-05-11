@@ -63,7 +63,7 @@ var title = show.title,
         var graph = new remmon.Graph(".ratings-graph", {
             width: $(".ratings-graph").innerWidth(),
             height: 400,
-            minEpisodeWidth: 10,
+            minEpisodeWidth: 15,
             source: remmon.get("data-source", "imdb"),
             type: remmon.get("line-type", "rating")
         }, data);
