@@ -43,7 +43,6 @@ header {
 h1,
 h2,
 h3 {
-  font-family: "Raleway";
   font-weight: 300;
   margin: 20px 0;
 
@@ -59,15 +58,20 @@ h3 {
 }
 
 h1 {
+  font-family: "Raleway";
   font-size: 40px;
 
-  &.logo {
+  .home & {
     color: darken(@detail, 5%);
   }
 }
 
 h2 {
   font-size: 28px;
+
+  .home & {
+    font-family: "Raleway";
+  }
 }
 
 h3 {
@@ -88,8 +92,8 @@ h3 {
 
   width: 100%;
   min-height: 400px;
-  margin: -50px 0 50px;
-  padding-top: 50px;
+  margin: -60px 0 50px;
+  padding-top: 60px;
 
   overflow: hidden;
   overflow-x: auto;
@@ -204,8 +208,8 @@ h3 {
     height: 80px;
     padding: 0 30px;
 
-    font-family: inherit;
-    font-weight: inherit;
+    font-family: "Raleway";
+    font-weight: 300;
     font-size: 26px;
 
     border: 1px solid #a0a0a0;
