@@ -1,7 +1,8 @@
 var request = require("request"),
     memoize = require("memoizee"),
     models = require("./models"),
-    cheerio = require("cheerio");
+    cheerio = require("cheerio"),
+    url = require("url");
 
 var Show = models.Show;
 
@@ -127,6 +128,7 @@ scraper.updateShow = function (title, callback) {
                     episode: episode.episode,
                     title: episode.title,
                     traktRating: episode.ratings.percentage / 10,
+                    traktLink: episode.url,
                     aired: new Date(episode.first_aired * 1000)
                 };
             });
@@ -167,10 +169,16 @@ scraper._updateShowImdb = function (update, callback) {
 
             var season = parseInt(numbers[1]),
                 episode = parseInt(numbers[2]),
-                rating = parseFloat(cells.eq(cols.rating).text());
+                rating = parseFloat(cells.eq(cols.rating).text()),
+                link = cells.eq(cols.name).find("a").first().attr("href");
 
             if (update.seasons[season] && update.seasons[season].episodes[episode]) {
                 update.seasons[season].episodes[episode].imdbRating = rating;
+
+                if (link) {
+                    link = url.resolve("http://www.imdb.com/", link);
+                    update.seasons[season].episodes[episode].imdbLink = link;
+                }
             }
         });
 

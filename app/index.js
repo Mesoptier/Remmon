@@ -69,7 +69,8 @@ app.get("/:title", function (req, res, next) {
                         s: e.season,
                         e: e.episode,
                         t: e.title,
-                        r: { t: e.traktRating, i: e.imdbRating }
+                        r: { t: e.traktRating, i: e.imdbRating },
+                        l: { t: e.traktLink, i: e.imdbLink }
                     };
                 }).sort(function (e1, e2) {
                     return e1.e - e2.e;

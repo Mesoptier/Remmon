@@ -137,7 +137,8 @@ var remmon = {
                         s: e.s,
                         e: e.e,
                         t: e.t,
-                        r: e.r[short]
+                        r: e.r[short],
+                        l: e.l[short]
                     };
                 });
 
@@ -284,16 +285,47 @@ var remmon = {
         var tooltipContent = tooltip.append("div")
             .attr("class", "tooltip-content");
 
-        var dots = groupDots.selectAll(".dot")
+        var dots = groupDots.selectAll("a.dot")
             .data(data[options.source].episodes);
 
         var dotsEnter = dots
-            .enter().append("circle")
+            .enter()
+            .append("a")
+            .attr("class", "dot")
+            .attr("xlink:href", function (d) { return d.l; });
+
+        dotsEnter
+            .append("circle")
             .attr("class", "dot")
             .attr("r", 3)
             .attr("fill", function (d) { return sc(d.s); })
             // Invisible border, gives a larger hover area
             .attr("stroke-width", 7).attr("stroke", "transparent")
+
+        var lines = groupLines.selectAll(".line")
+            .data(data[options.source][options.type]);
+
+        var linesEnter = lines
+            .enter().append("path")
+            .attr("class", "line")
+            .style("stroke", function (d, i) { return sc(d.s); });
+
+        var areas = groupAreas.selectAll(".area")
+            .data(data[options.source][options.type]);
+
+        var areasEnter = areas
+            .enter().append("path")
+            .attr("class", "area")
+            .style("fill", function (d, i) { return sc(d.s); });
+
+        var seasonLabelsEnter = groupSeasonLabels.selectAll(".season-label")
+            .data(data[options.source][options.type])
+            .enter().append("text")
+            .attr("class", "season-label")
+            .text(function (d) { return "Season " + d.s; });
+
+        // --- [Events] ---
+        dotsEnter
             .on("mouseover", function (d) {
                 d3.select(this)
                     .attr("r", 4);
@@ -329,28 +361,6 @@ var remmon = {
                 tooltip.transition()
                     .style("opacity", 0);
             });
-
-        var lines = groupLines.selectAll(".line")
-            .data(data[options.source][options.type]);
-
-        var linesEnter = lines
-            .enter().append("path")
-            .attr("class", "line")
-            .style("stroke", function (d, i) { return sc(d.s); });
-
-        var areas = groupAreas.selectAll(".area")
-            .data(data[options.source][options.type]);
-
-        var areasEnter = areas
-            .enter().append("path")
-            .attr("class", "area")
-            .style("fill", function (d, i) { return sc(d.s); });
-
-        var seasonLabelsEnter = groupSeasonLabels.selectAll(".season-label")
-            .data(data[options.source][options.type])
-            .enter().append("text")
-            .attr("class", "season-label")
-            .text(function (d) { return "Season " + d.s; });
 
         /**
          * Updates the width and height of the graph, it still needs to be redrawn to see the changes.
@@ -418,6 +428,19 @@ var remmon = {
             dots.data(data[options.source].episodes);
             lines.data(data[options.source][options.type]);
             areas.data(data[options.source][options.type]);
+
+            dotsEnter.attr("xlink:href", function (d) { return d.l; });
+        };
+
+        var initialAnimation = function () {
+            this.style("opacity", 0)
+                .attr("transform", "translate(0, " + (-y(0) * (0.8 - 1)) + ") scale(1, 0.8)")
+                .transition()
+                .delay(100)
+                .duration(600)
+                .ease("back-out")
+                .style("opacity", 1)
+                .attr("transform", "translate(0, 0) scale(1, 1)")
         };
 
         /**
@@ -431,9 +454,14 @@ var remmon = {
                 .attr("y1", function (d) { return y(d) })
                 .attr("y2", function (d) { return y(d) });
 
+            if (animation == "initial") {
+                groupDots.call(initialAnimation);
+                groupAreas.call(initialAnimation);
+                groupLines.call(initialAnimation);
+            }
+
             this._animate(dotsEnter, animation)
-                .attr("cx", function (e, i) { return ex(e.s, e.e); })
-                .attr("cy", function (e) { return y(e.r); });
+                .attr("transform", function (e, i) { return "translate("+ ex(e.s, e.e) + ", " + y(e.r) + ")"; });
 
             this._animate(linesEnter, animation)
                 .attr("d", function (s) { return line(s.e); });
@@ -448,18 +476,6 @@ var remmon = {
 
         this._animate = function (enter, animation) {
             switch (animation) {
-                case "initial":
-                    var opacity = enter.style("opacity");
-                    return enter
-                        .style("opacity", 0)
-                        .attr("transform", "translate(0, " + (-y(0) * (0.8 - 1)) + ") scale(1, 0.8)")
-                        .transition()
-                        .delay(100)
-                        .duration(600)
-                        .ease("back-out")
-                        .style("opacity", opacity)
-                        .attr("transform", "translate(0, 0) scale(1, 1)");
-
                 case "source-change":
                 case "type-change":
                     return enter

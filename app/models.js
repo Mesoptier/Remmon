@@ -23,6 +23,8 @@ var showSchema = new mongoose.Schema({
             title: String,
             traktRating: Number,
             imdbRating: Number,
+            traktLink: String,
+            imdbLink: String,
             aired: Date
         }]
     }]
