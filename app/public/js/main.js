@@ -327,7 +327,7 @@ var remmon = {
         // --- [Events] ---
         dotsEnter
             .on("mouseover", function (d) {
-                d3.select(this)
+                d3.select(this).select("circle")
                     .attr("r", 4);
 
                 tooltipContent
@@ -355,7 +355,7 @@ var remmon = {
                     .style("opacity", 1);
             })
             .on("mouseout", function (d) {
-                d3.select(this)
+                d3.select(this).select("circle")
                     .attr("r", 3);
 
                 tooltip.transition()
@@ -461,7 +461,8 @@ var remmon = {
             }
 
             this._animate(dotsEnter, animation)
-                .attr("transform", function (e, i) { return "translate("+ ex(e.s, e.e) + ", " + y(e.r) + ")"; });
+                .attr("transform", function (e, i) { return "translate("+ ex(e.s, e.e) + ", " + y(e.r) + ")"; })
+                .attr("opacity", function (e) { return e.l ? 1 : 0.5; });
 
             this._animate(linesEnter, animation)
                 .attr("d", function (s) { return line(s.e); });
