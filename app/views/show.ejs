@@ -70,15 +70,15 @@ var title = show.title,
 
         graph.draw("initial");
 
-        // Only redraw if the window hasn't resized for 100 milliseconds, but immediately after the first call.
+        // Only redraw if the window hasn't resized for 100 milliseconds
         var resizeDraw = remmon.debounce(function () {
             graph.draw("resize");
-        }, 100, true);
+        }, 100);
 
         $(window).on("resize", function () {
             if (graph.resize($(".ratings-graph").innerWidth())) {
                 // Only redraw if the window resize caused the graph to resize as well
-                resizeDraw();
+                graph.draw("resize"); // resizeDraw();
             }
         });
 
