@@ -1,8 +1,8 @@
 # Todo
 (todo todo todo todo todo toodooooooo)
 
- *  Favicon
- *  Footer
+ *  ~~Favicon~~
+ *  ~~Footer~~
  *  Mobile
 
 ### Scraper
@@ -15,10 +15,10 @@
 
 ### Series page
  *  Sharing buttons?
- *  IMDb/Trakt/whatever links
+ *  ~~IMDb/Trakt/whatever links~~ (on episodes)
 
 ### Graphs
  *  ~~Season labels~~
- *  Hover effects, episode information
+ *  ~~Hover effects, episode information~~
  *  Labels over controls
  *  Data-source/Line-type-selection via URL, for sharing
