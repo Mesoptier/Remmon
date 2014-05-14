@@ -22,6 +22,9 @@ app.set("mongodb host", "127.0.0.1");
 app.set("mongodb port", "27017");
 app.set("trakt apikey", process.env.TRAKT_APIKEY);
 
+// Reload show after 12 hours
+app.set("scraper reload time", 12 * 60 * 60 * 1000);
+
 // Logging middleware
 app.use(morgan({
     format: "tiny",
@@ -100,20 +103,6 @@ app.get("/:title", function (req, res, next) {
             show: show,
             data: data
         });
-    });
-});
-
-app.post("/:title/reload", function (req, res, next) {
-    var title = req.params.title;
-
-    scraper.updateShow(title, function (err, show) {
-        if (err)
-            return res.json({ status: "error", error: err.message.toString() });
-
-        if (show == null)
-            return res.json({ status: "error", error: "iunno" });
-
-        res.json({ status: "success" });
     });
 });
 

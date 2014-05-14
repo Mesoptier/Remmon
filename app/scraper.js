@@ -90,11 +90,44 @@ scraper.findShow = function (title, callback) {
         if (show == null)
             return scraper.updateShow(title, callback);
 
+        if (show.updatedAt == null || show.updatedAt < new Date - app.get("scraper reload time"))
+            return scraper.updateShow(show, callback);
+
         return callback(null, show);
     });
 };
 
-scraper.updateShow = function (title, callback) {
+var updating = [];
+
+scraper.updateShow = function (show, callback) {
+    var title = show;
+
+    if (show instanceof Show) {
+        var _callback = callback || function () {},
+            _id = show._id.toString(0);
+
+        // If this show is already being updated
+        if (updating.indexOf(_id) != -1)
+            return _callback(null, show);
+
+        // Mark this show as being updated
+        updating.push(_id);
+
+        callback = function () {
+            var i = updating.indexOf(_id);
+
+            // Unmark this show as being updated
+            if (i != -1) {
+                updating.splice(i, 1);
+            }
+
+            // Call the original callback
+            _callback.apply(this, arguments);
+        };
+
+        title = show.slug || show.imdbId || show.tvdbId;
+    }
+
     scraper._trakt("show/summary", title + "/true", function (err, data) {
         if (err) return callback(err);
 
