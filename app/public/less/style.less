@@ -78,21 +78,12 @@ h3 {
   font-size: 24px;
 }
 
-.separator {
-  display: inline-block;
-  width: 1px;
-  height: 18px;
-  margin: 10px 30px;
-
-  background: #e0e0e0;
-}
-
 .ratings-graph {
   position: relative;
 
   width: 100%;
-  min-height: 400px;
-  margin: -60px 0 50px;
+  min-height: 460px;
+  margin: -60px 0 40px;
   padding-top: 60px;
 
   overflow: hidden;
@@ -163,6 +154,8 @@ h3 {
 
 .graph-controls {
 
+  margin: 40px 0;
+
   .control-section {
     display: inline-block;
 
@@ -192,9 +185,19 @@ h3 {
 
   }
 
+  .separator {
+    display: inline-block;
+    width: 1px;
+    height: 18px;
+    margin: 10px 30px;
+
+    background: #e0e0e0;
+  }
 }
 
 .search {
+  position: relative;
+
   width: 750px;
   margin: 80px auto;
 
@@ -236,6 +239,10 @@ h3 {
   }
 
   .results-box {
+    position: absolute;
+    width: 100%;
+
+    background: #fff;
     border: 1px solid #e0e0e0;
     border-top: 0;
     font-size: 18px;
@@ -298,4 +305,27 @@ h3 {
 
   .button();
 
+}
+
+footer {
+  margin: 80px 0 40px;
+
+  color: #808080;
+
+  a {
+    text-decoration: none;
+    color: @detail;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: lighten(@detail, 10%);
+    }
+  }
+
+  .separator {
+    margin: 0 15px;
+  }
 }

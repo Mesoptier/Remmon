@@ -48,18 +48,11 @@ h2 {
 h3 {
   font-size: 24px;
 }
-.separator {
-  display: inline-block;
-  width: 1px;
-  height: 18px;
-  margin: 10px 30px;
-  background: #e0e0e0;
-}
 .ratings-graph {
   position: relative;
   width: 100%;
-  min-height: 400px;
-  margin: -60px 0 50px;
+  min-height: 460px;
+  margin: -60px 0 40px;
   padding-top: 60px;
   overflow: hidden;
   overflow-x: auto;
@@ -110,6 +103,9 @@ h3 {
   display: block;
   font-size: 20px;
 }
+.graph-controls {
+  margin: 40px 0;
+}
 .graph-controls .control-section {
   display: inline-block;
   zoom: 1;
@@ -148,7 +144,15 @@ h3 {
   color: #fff;
   background-color: #9b59b6;
 }
+.graph-controls .separator {
+  display: inline-block;
+  width: 1px;
+  height: 18px;
+  margin: 10px 30px;
+  background: #e0e0e0;
+}
 .search {
+  position: relative;
   width: 750px;
   margin: 80px auto;
   text-align: left;
@@ -205,6 +209,9 @@ h3 {
   opacity: 0.1;
 }
 .search .results-box {
+  position: absolute;
+  width: 100%;
+  background: #fff;
   border: 1px solid #e0e0e0;
   border-top: 0;
   font-size: 18px;
@@ -265,4 +272,21 @@ h3 {
 }
 .action-button:active {
   background-color: #f0f0f0;
+}
+footer {
+  margin: 80px 0 40px;
+  color: #808080;
+}
+footer a {
+  text-decoration: none;
+  color: #9b59b6;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+footer a:active {
+  color: #b07cc6;
+}
+footer .separator {
+  margin: 0 15px;
 }
