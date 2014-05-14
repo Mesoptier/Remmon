@@ -5,11 +5,14 @@ var express = require("express"),
     async = require("async"),
     params = require("express-params"),
     morgan = require("morgan"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    fs = require("fs");
 
 app = express();
 
 // Config
+app.set("data path", __dirname + "/../data");
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
@@ -19,7 +22,16 @@ app.set("mongodb host", "127.0.0.1");
 app.set("mongodb port", "27017");
 app.set("trakt apikey", process.env.TRAKT_APIKEY);
 
-app.use(morgan("short"));
+// Logging middleware
+app.use(morgan({
+    format: "tiny",
+    stream: process.stdout
+}));
+app.use(morgan({
+    format: "default",
+    stream: fs.createWriteStream(app.get("data path") + "/remmon.log")
+}));
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser());
 
